@@ -2,6 +2,7 @@ import pygame
 import random
 import time
 import Core.scene.SceneManager
+from Core.Joysticks import Joysticks
 from Core.Input import Input
 from Core.Screen import Screen
 from Core.Debug import Debug
@@ -20,7 +21,7 @@ class GameManager(object):
     def __del__(self):
         self.exit()
 
-    def __init__(self, screen_size=None, full_screen=True):
+    def __init__(self, screen_size=None, full_screen=True, log_fps=False):
         if not GameManager.__inited:
             pygame.init()
 
@@ -44,9 +45,11 @@ class GameManager(object):
             self.pygame_clock = pygame.time.Clock()  # type: pygame
             self.pygame_clock.tick()
 
-            random.seed(time.time())
+            self.joystick_manager = Joysticks()
 
-            self.player_joy = -1
+            self.log_fps = log_fps
+
+            random.seed(time.time())
 
     def main_loop(self):
         while self.running:
@@ -57,6 +60,9 @@ class GameManager(object):
                     self.exit()
 
             self.delta_time = float(self.pygame_clock.tick(90)) / (10 ** 3)
+
+            if self.log_fps:
+                Debug.log("FPS: {}".format(1/self.delta_time), "GameManager")
 
             self.scene_manager.main_loop()
 

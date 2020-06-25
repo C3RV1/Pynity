@@ -6,7 +6,6 @@ class GameObject:
         self.parent = parent  # type: GameObject
         self.active = True
         self.scene = scene
-        self.scene.game_objects.append(self)
 
         self.name = name
 
