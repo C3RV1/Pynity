@@ -1,4 +1,5 @@
 from Core.Component import Component
+from Core.GameObject import GameObject
 from Core.components.Transform import Transform
 from Core.math.Vector2D import Vector2D
 from Core.components.Camera import Camera
@@ -10,11 +11,12 @@ import pygame
 
 class SpriteRenderer(Component):
     def __init__(self, game_object, sprite=None, update_on_draw=False, align_x="center", align_y="center"):
+        # type: (GameObject, Sprite, bool, str, str) -> None
         Component.__init__(self, game_object)
 
         self.__sprite = sprite  # type: Sprite
         self.transform = None  # type: Transform
-        self.__sprite_transformed = None
+        self.__sprite_transformed = None  # type: pygame.Surface
         self.sprite_size = Vector2D(0, 0)
         self.__current_world_scale = Vector2D(1, 1)
         self.__current_world_rotation = 0
@@ -24,7 +26,7 @@ class SpriteRenderer(Component):
         self.align_y = align_y
 
     def start(self):
-        self.transform = self.game_object.get_component(Transform)
+        self.transform = self.game_object.get_component(Transform)  # type: Transform
         if not self.transform:
             Debug.log_error("Transform not found, disabling", self)
             self.enabled = False
@@ -32,6 +34,7 @@ class SpriteRenderer(Component):
 
     @property
     def sprite(self):
+        # type: () -> Sprite
         return self.__sprite
 
     def update(self):
@@ -42,6 +45,7 @@ class SpriteRenderer(Component):
 
     @sprite.setter
     def sprite(self, value):
+        # type: (Sprite) -> None
         if not isinstance(value, Sprite):
             Debug.log_error("sprite parameter not Sprite object", self)
             return

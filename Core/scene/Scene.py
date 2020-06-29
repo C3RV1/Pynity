@@ -6,6 +6,7 @@ class Scene:
         self.game_objects = []
         self.background_colour = (255, 255, 255)
         self.fill_screen = False
+        self.active_routines = []
 
     def start(self):
         for game_object in self.game_objects:
@@ -14,6 +15,13 @@ class Scene:
     def update(self):
         if self.fill_screen:
             Screen.screen().fill(self.background_colour)
+
+        for active_routine in self.active_routines:
+            try:
+                next(active_routine)
+            except:
+                self.active_routines.remove(active_routine)
+
         for game_object in self.game_objects:
             game_object.do_update()
 
@@ -48,3 +56,6 @@ class Scene:
             if game_object.name == name:
                 return game_object
         return None
+
+    def new_routing(self, routine):
+        self.active_routines.append(routine)

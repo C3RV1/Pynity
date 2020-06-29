@@ -64,8 +64,7 @@ class GameManager(object):
             self.delta_time = float(self.pygame_clock.tick_busy_loop(self.fps_cap)) / (10 ** 3)
 
             if self.log_fps:
-                if (1.0/self.delta_time) < 40:
-                    Debug.log("FPS: {}".format(1.0/self.delta_time), "GameManager")
+                Debug.log("FPS: {}".format(1.0/self.delta_time), "GameManager")
                 # Debug.log("Dt: {}".format(self.delta_time), "GameManager")
 
             self.scene_manager.main_loop()

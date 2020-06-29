@@ -2,8 +2,9 @@ from setuptools import setup
 
 setup(
     name='Pynity',
-    version='1.6.17',
-    packages=['Core', 'Core.math', 'Core.scene', 'Core.objects', 'Core.components', 'Core.networking'],
+    version='1.9.3',
+    packages=['Core', 'Core.math', 'Core.scene', 'Core.objects', 'Core.components', 'Core.networking',
+              'Core.from_internet'],
     url='',
     license='',
     author='KeyFr4me',

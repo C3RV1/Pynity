@@ -1,10 +1,12 @@
 from Core.Component import Component
+from Core.GameObject import GameObject
 from Core.math.Vector2D import Vector2D
 from Core.Debug import Debug
 
 
 class Transform(Component):
     def __init__(self, game_object, position=None, scale=None, rotation=None):
+        # type: (GameObject, Vector2D, Vector2D, float) -> None
         Component.__init__(self, game_object)
         if isinstance(position, Vector2D):
             self.position = position
@@ -23,18 +25,22 @@ class Transform(Component):
 
     @property
     def rotation(self):
+        # type: () -> float
         return self.__rotation
 
     @rotation.setter
     def rotation(self, value):
+        # type: (float) -> None
         self.__rotation = value % 360
 
     @property
     def scale(self):
+        # type: () -> Vector2D
         return self.__scale.copy()
 
     @scale.setter
     def scale(self, value):
+        # type: (Vector2D) -> None
         if not isinstance(value, Vector2D):
             Debug.log_warning("Scale is not Vector2D, is of type {}".format(type(value).__name__), self)
             return
@@ -44,6 +50,7 @@ class Transform(Component):
 
     @property
     def world_position(self):
+        # type: () -> Vector2D
         if self.game_object.parent is None:
             return self.position.copy()
         else:
@@ -58,6 +65,7 @@ class Transform(Component):
 
     @world_position.setter
     def world_position(self, value):
+        # type: (Vector2D) -> None
         if not isinstance(value, Vector2D):
             return
         if self.game_object.parent is None:
@@ -73,6 +81,7 @@ class Transform(Component):
 
     @property
     def world_scale(self):
+        # type: () -> Vector2D
         if self.game_object.parent is None:
             return self.__scale.copy()
         else:
@@ -85,6 +94,7 @@ class Transform(Component):
 
     @property
     def world_rotation(self):
+        # type: () -> float
         if self.game_object.parent is None:
             return self.__rotation
         else:
@@ -98,6 +108,7 @@ class Transform(Component):
 
     @world_rotation.setter
     def world_rotation(self, value):
+        # type: (float) -> None
         value %= 360
         parent_transform = self.game_object.parent.get_component(Transform)  # type: Transform
         if parent_transform is None:
@@ -107,6 +118,7 @@ class Transform(Component):
         self.__rotation %= 360
 
     def world_to_local_position(self, world_position):
+        # type: (Vector2D) -> Vector2D
         if self.game_object.parent is None:
             return world_position
         else:
@@ -118,6 +130,7 @@ class Transform(Component):
             return local_position
 
     def local_to_world_position(self, local_position):
+        # type: (Vector2D) -> Vector2D
         if self.game_object.parent is None:
             return local_position
         else:
@@ -129,9 +142,11 @@ class Transform(Component):
             return world_position
 
     def world_to_local_scale(self, world_scale):
+        # type: (Vector2D) -> Vector2D
         pass
 
     def local_to_world_scale(self, local_scale):
+        # type: (Vector2D) -> Vector2D
         pass
 
     def world_to_local_rotation(self, world_rotation):

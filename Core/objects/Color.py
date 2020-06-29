@@ -1,3 +1,4 @@
+from Core.Debug import Debug
 
 
 class RGBA:

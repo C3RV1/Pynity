@@ -6,6 +6,7 @@ from Core.Debug import Debug
 
 class Camera(Component):
     def __init__(self, game_object, render_rect):
+        # type: (GameObject, list) -> None
         Component.__init__(self, game_object)
         self.render_pos = (render_rect[0], render_rect[1])
         self.render_size = (render_rect[2], render_rect[3])
