@@ -21,7 +21,7 @@ class GameManager(object):
     def __del__(self):
         self.exit()
 
-    def __init__(self, screen_size=None, full_screen=True, log_fps=False):
+    def __init__(self, screen_size=None, full_screen=True, log_fps=False, fps_limit=60):
         if not GameManager.__inited:
             pygame.init()
 
@@ -51,6 +51,8 @@ class GameManager(object):
 
             random.seed(time.time())
 
+            self.fps_cap = fps_limit
+
     def main_loop(self):
         while self.running:
             events = pygame.event.get()
@@ -59,10 +61,12 @@ class GameManager(object):
                 if event.type == pygame.QUIT:
                     self.exit()
 
-            self.delta_time = float(self.pygame_clock.tick(90)) / (10 ** 3)
+            self.delta_time = float(self.pygame_clock.tick_busy_loop(self.fps_cap)) / (10 ** 3)
 
             if self.log_fps:
-                Debug.log("FPS: {}".format(1/self.delta_time), "GameManager")
+                if (1.0/self.delta_time) < 40:
+                    Debug.log("FPS: {}".format(1.0/self.delta_time), "GameManager")
+                # Debug.log("Dt: {}".format(self.delta_time), "GameManager")
 
             self.scene_manager.main_loop()
 

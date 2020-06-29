@@ -93,7 +93,7 @@ class Vector2D:
         return v
 
     def __mod__(self, other):
-        return self.x * other.__x + self.y * other.__y
+        return self.x * other.x + self.y * other.y
 
     def rotate(self, rotation):
         angle = math.atan2(self.y, self.x)
@@ -119,7 +119,7 @@ class Vector2D:
         y_change = self.y - p2.y
         angle = math.atan2(y_change, x_change)
         angle = Core.math.math2d.radian_to_degree(angle) + 90
-        angle = Core.math.math2d.to360rotation(angle)
+        angle %= 360
         return angle
 
     def align_to_origin_angle(self):

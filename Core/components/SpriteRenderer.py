@@ -48,6 +48,10 @@ class SpriteRenderer(Component):
         self.__sprite = value
         self.update_sprite()
 
+    @property
+    def sprite_transformed(self):
+        return self.__sprite_transformed
+
     def update_sprite(self):  # type: () -> None
         if not isinstance(self.__sprite, Sprite):
             # Debug.log_warning("sprite parameter not Sprite object", self)

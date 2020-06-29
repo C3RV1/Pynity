@@ -1,5 +1,22 @@
 import pygame
 
+# Joystick constants
+joystick_buttons = {"a": 1,
+                    "b": 0,
+                    "x": 3,
+                    "y": 2,
+                    "r": 5,
+                    "l": 4,
+                    "zr": 7,
+                    "zl": 6,
+                    "plus": 9,
+                    "minus": 8}
+joystick_hat = {"hat": 0}
+joystick_axis = {"horizontal": {"num": 0,
+                                "range": [-0.81, 0.81]},
+                 "vertical": {"num": 1,
+                              "range": [-0.81, 0.81]}}
+
 
 class Joysticks(object):
     __instance = None
@@ -13,6 +30,7 @@ class Joysticks(object):
 
     def __init__(self):
         if not Joysticks.__inited:
+            Joysticks.__inited = True
             pygame.joystick.init()
             self.__joystick = [pygame.joystick.Joystick(i) for i in range(pygame.joystick.get_count())]
             self.joystick_count = pygame.joystick.get_count()

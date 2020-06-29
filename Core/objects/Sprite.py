@@ -20,13 +20,16 @@ class Sprite(object):
             self.sprite_size = Vector2D(surface.get_width(), surface.get_height())
 
     @staticmethod
-    def from_path(path):
-        # type: (str) -> Sprite
+    def from_path(path, convert_alpha=True):
+        # type: (str, bool) -> Sprite
 
         if not os.path.isfile(path):
             Debug.log_error("Sprite {} not found".format(path), "Sprite Object")
             return None
 
-        surface = pygame.image.load(path).convert_alpha()
+        if convert_alpha:
+            surface = pygame.image.load(path).convert_alpha()
+        else:
+            surface = pygame.image.load(path).convert()
 
         return Sprite(surface=surface)

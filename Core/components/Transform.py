@@ -56,6 +56,21 @@ class Transform(Component):
             position_copy.make_global(parent_transform.world_position)
             return position_copy
 
+    @world_position.setter
+    def world_position(self, value):
+        if not isinstance(value, Vector2D):
+            return
+        if self.game_object.parent is None:
+            self.position = value.copy()
+        else:
+            parent_transform = self.game_object.parent.get_component(Transform)  # type: Transform
+            if parent_transform is None:
+                return
+            self.position = value.copy()
+            self.position.relative_to(parent_transform.world_position)
+            self.position.rotate(-parent_transform.rotation)
+            self.position /= parent_transform.world_scale
+
     @property
     def world_scale(self):
         if self.game_object.parent is None:
@@ -80,3 +95,47 @@ class Transform(Component):
             rotation_copy += parent_transform.world_rotation
             rotation_copy %= 360.0
             return rotation_copy
+
+    @world_rotation.setter
+    def world_rotation(self, value):
+        value %= 360
+        parent_transform = self.game_object.parent.get_component(Transform)  # type: Transform
+        if parent_transform is None:
+            return
+        self.__rotation = value
+        self.__rotation -= parent_transform.world_rotation
+        self.__rotation %= 360
+
+    def world_to_local_position(self, world_position):
+        if self.game_object.parent is None:
+            return world_position
+        else:
+            parent_transform = self.game_object.parent.get_component(Transform)  # type: Transform
+            local_position = world_position.copy()
+            local_position.relative_to(parent_transform.world_position)
+            local_position.rotate(-parent_transform.world_rotation)
+            local_position /= parent_transform.world_scale
+            return local_position
+
+    def local_to_world_position(self, local_position):
+        if self.game_object.parent is None:
+            return local_position
+        else:
+            parent_transform = self.game_object.parent.get_component(Transform)  # type: Transform
+            world_position = local_position.copy()  # type: Vector2D
+            world_position *= parent_transform.world_scale
+            world_position.rotate(parent_transform.world_rotation)
+            world_position.make_global(parent_transform.world_position)
+            return world_position
+
+    def world_to_local_scale(self, world_scale):
+        pass
+
+    def local_to_world_scale(self, local_scale):
+        pass
+
+    def world_to_local_rotation(self, world_rotation):
+        pass
+
+    def local_to_world_rotation(self, local_rotation):
+        pass
